@@ -1,11 +1,9 @@
 package com.udacity.gradle.builditbigger;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 public class EmptyStringTest extends AndroidTestCase {
 
-    private static final String LOG_TAG = "EmptyStringTest";
 
     @SuppressWarnings("unchecked")
     public void test() {
