@@ -7,9 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import org.swistowski.agata.jokelibrary.JokeTeller;
 import org.swistowski.agata.myjokelibrary.AndroidLibraryActivity;
 
 
@@ -54,7 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke() {
         //JokeTeller jokeTeller = new JokeTeller();
-        new EndpointsAsyncTask().execute(this);
+        new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncResponse() {
+            @Override
+            public void processFinish(String output) {
+                Intent intent = new Intent(MainActivity.this, AndroidLibraryActivity.class);
+                intent.putExtra("joke", output);
+                MainActivity.this.startActivity(intent);
+            }
+        }).execute(this);
     }
 
 }

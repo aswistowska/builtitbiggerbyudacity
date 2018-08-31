@@ -1,7 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -10,11 +9,18 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
-import org.swistowski.agata.myjokelibrary.AndroidLibraryActivity;
-
 import java.io.IOException;
 
 public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
+
+    public interface AsyncResponse {
+        void processFinish(String output);
+    }
+    private AsyncResponse delegate = null;
+
+    public EndpointsAsyncTask(AsyncResponse delegate){
+        this.delegate = delegate;
+    }
 
     private static MyApi myApiService = null;
     private Context context;
@@ -40,7 +46,6 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
         }
 
         context = params[0];
-        //String name = params[0].second;
 
         try {
             return myApiService.tellJoke().execute().getData();
@@ -51,9 +56,7 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Intent intent = new Intent(context, AndroidLibraryActivity.class);
-        intent.putExtra("joke", result);
-        context.startActivity(intent);
+        delegate.processFinish(result);
     }
 }
 
