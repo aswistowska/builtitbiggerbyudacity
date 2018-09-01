@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.swistowski.agata.myjokelibrary.AndroidLibraryActivity;
 
@@ -58,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AndroidLibraryActivity.class);
                 intent.putExtra("joke", output);
                 MainActivity.this.startActivity(intent);
+            }
+
+            @Override
+            public void processError(Exception error) {
+                Toast.makeText(MainActivity.this, "Cannot connect to api: " + error.toString(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }).execute(this);
     }

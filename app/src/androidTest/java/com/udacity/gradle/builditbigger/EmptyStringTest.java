@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
 import android.test.AndroidTestCase;
+import android.util.Pair;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -13,20 +14,25 @@ public class EmptyStringTest extends AndroidTestCase {
 
         final CountDownLatch signal = new CountDownLatch(1);
 
-        String result = null;
+        Pair<String, Exception> result = null;
         EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncResponse() {
             @Override
             public void processFinish(String output) {
+                assertNotNull(output);
                 signal.countDown();
+            }
+
+            @Override
+            public void processError(Exception error) {
+
             }
         });
         endpointsAsyncTask.execute(getContext());
         try {
-            result = endpointsAsyncTask.get(30, TimeUnit.SECONDS);
+            endpointsAsyncTask.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             fail("Fail");
         }
-        assertNotNull(result);
         signal.await();
     }
 }
